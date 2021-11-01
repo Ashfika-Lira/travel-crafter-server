@@ -19,12 +19,13 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        const database = client.db('tour');
-        const tourCollection = database.collection('packages');
+        const database = client.db('travel');
+        const tourCollection = database.collection('services');
         const ordersCollection = database.collection('orders');
 
         // POST Method
-        app.get('/packages', async (req, res) => {
+        app.get('/services', async (req, res) => {
+            console.log('hit the post api');
 			const doc = req.body;
             const result = await tourCollection.insertOne(doc);
             res.send(result);
@@ -50,7 +51,7 @@ async function run() {
         });
 
         // get method
-        app.get('/packages', async (req, res) => {
+        app.get('/services', async (req, res) => {
             const cursor = tourCollection.find({});
             const allTours = await cursor.toArray();
             res.json(allTours);
@@ -63,7 +64,7 @@ async function run() {
         });
 
         //single get method
-        app.get('/packages/:id', async (req, res) => {
+        app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             // console.log('getting specific service', id);
             const query = { _id: ObjectId(id) };
@@ -86,10 +87,10 @@ async function run() {
 
 run().catch(console.dir);
 
-app.get('/', (req, res) => {
-    res.send('Running Travel Server');
-});
+// app.get('/', (req, res) => {
+    // res.send('Running Travel Server');
+// });
 
-app.listen(port, () => {
-    console.log('Running Travel Server on port:', port);
-})
+// app.listen(port, () => {
+    // console.log('Running Travel Server on port:', port);
+// })
